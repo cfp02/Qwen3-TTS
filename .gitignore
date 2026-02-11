@@ -27,3 +27,4 @@ models
 .DS_Store
 sound_files_stuff
 output_audio_wavs/
+prompt_cache/
