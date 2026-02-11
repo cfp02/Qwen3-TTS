@@ -24,3 +24,6 @@ venv/
 env/
 .venv
 models
+.DS_Store
+sound_files_stuff
+output_audio_wavs/
