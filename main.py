@@ -26,6 +26,12 @@ model = Qwen3TTSModel.from_pretrained(
     local_files_only=True,
 )
 
+# Extract model identifiers for cache filename
+# This ensures prompts are model-specific (different sizes/tokenizers = different prompts)
+model_size = model.model.tts_model_size  # e.g., "1b7" or "0b6"
+tokenizer_type = model.model.tokenizer_type  # e.g., "qwen3_tts_tokenizer_12hz"
+model_type = model.model.tts_model_type  # e.g., "base"
+
 voice = "cole1"
 # voice = "obama1"
 # voice = "spock1"
@@ -33,7 +39,8 @@ voice = "cole1"
 ref_stem = root / "reference_voices" / voice
 prompt_cache_dir = root / "prompt_cache"
 prompt_cache_dir.mkdir(exist_ok=True)
-prompt_cache_path = prompt_cache_dir / f"{voice}.pt"
+# Include model size and tokenizer type in cache filename to avoid cross-model reuse
+prompt_cache_path = prompt_cache_dir / f"{voice}_{tokenizer_type}_{model_size}_{model_type}.pt"
 
 
 def save_voice_prompt(prompt_items, path: Path):
@@ -76,6 +83,10 @@ def load_voice_prompt(path: Path) -> list[VoiceClonePromptItem]:
 
 
 # Load cached prompt or create new one
+# Cache filename includes model size/tokenizer to prevent cross-model reuse
+print(f"Model: {tokenizer_type} | Size: {model_size} | Type: {model_type}")
+print(f"Cache file: {prompt_cache_path.name}")
+
 if prompt_cache_path.exists():
     print(f"Loading cached voice prompt from: {prompt_cache_path}")
     prompt_items = load_voice_prompt(prompt_cache_path)
@@ -120,4 +131,5 @@ for text in texts:
     print(f"Saved: {out_path}")
 
 # Note: To regenerate the prompt (e.g., if reference audio changed), delete:
-#   prompt_cache/{voice}.pt
+#   prompt_cache/{voice}_{tokenizer_type}_{model_size}_{model_type}.pt
+# Example: prompt_cache/cole1_qwen3_tts_tokenizer_12hz_1b7_base.pt
