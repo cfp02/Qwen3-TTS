@@ -33,9 +33,10 @@ tokenizer_type = model.model.tokenizer_type  # e.g., "qwen3_tts_tokenizer_12hz"
 model_type = model.model.tts_model_type  # e.g., "base"
 
 # voice = "cole1"
-voice = "cole2"
+# voice = "cole2"
 # voice = "obama1"
 # voice = "spock1"
+voice = "jackie1"
 
 ref_stem = root / "reference_voices" / voice
 prompt_cache_dir = root / "prompt_cache"
@@ -104,8 +105,7 @@ else:
     save_voice_prompt(prompt_items, prompt_cache_path)
 
 texts = [
-    "Hi. So this is a test of the voice cloning and saving of the prompt. It's working pretty well, but it could use some improvement.",
-    "These are the voyages of the Starship Enterprise. Its continuing mission: to explore strange new worlds, to seek out new life and new civilizations, to boldly go where no one has gone before.",
+    "Today will be sunny with a high of 25 degrees Celsius and a light breeze. Expect scattered showers throughout the day and a chance of thunderstorms in the evening. Cloudy in the morning with clear skies expected by afternoon. Highs around 20 degrees. It's going to be windy and chilly with temperatures reaching only 15 degrees Celsius. A beautiful, warm day ahead with highs around 28 degrees and no chance of rain.",
 ]
 
 output_dir = root / "output_audio_wavs"
